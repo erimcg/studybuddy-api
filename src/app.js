@@ -17,10 +17,6 @@ app.get('/', (req, res) => {
     res.send("hello")
 })
 
-/*app.post('/user', (req, res) => {
-    res.send("jello")
-})*/
-
 app.use(userRouter)
 
 const port = process.env.PORT || 3000
