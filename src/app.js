@@ -1,12 +1,8 @@
 const express = require('express')
-
-// npm install cors --save
 const cors = require('cors');
-
 const userRouter = require('./routers/user')
 
 const app = express()
-
 
 app.use(cors())
 app.use(function (req, res, next) {
@@ -16,11 +12,12 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json())
-app.use(userRouter)
 
 app.get('', (req, res) => {
     res.send("hello")
 })
+
+app.use(userRouter)
 
 const port = process.env.PORT || 3000
 
