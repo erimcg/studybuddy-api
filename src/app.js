@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors');
-const userRouter = require('./routers/user')
+//const userRouter = require('./routers/user')
 
 const app = express()
 
@@ -17,7 +17,7 @@ app.post('/user', (req, res) => {
     res.send("hello")
 })
 
-app.use(userRouter)
+//app.use(userRouter)
 
 const port = process.env.PORT || 3000
 
