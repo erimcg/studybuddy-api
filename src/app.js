@@ -17,7 +17,7 @@ app.get('', (req, res) => {
     res.send("hello")
 })
 
-app.use(userRouter)
+app.use('/user', userRouter)
 
 const port = process.env.PORT || 3000
 
