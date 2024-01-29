@@ -13,11 +13,11 @@ app.use(function (req, res, next) {
 
 app.use(express.json())
 
-app.get('', (req, res) => {
+app.post('/user', (req, res) => {
     res.send("hello")
 })
 
-app.use('/user', userRouter)
+app.use(userRouter)
 
 const port = process.env.PORT || 3000
 
