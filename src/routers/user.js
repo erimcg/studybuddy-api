@@ -1,10 +1,11 @@
 const express = require('express')
 
-const router = new express.Router()
+const router = express.Router()
 
-router.post('/', async (req, res) => {
-    console.log(req.body)
-    res.status(201).send(req.body)
+router.get('/user', (req, res) => {
+    //console.log(req.body)
+    //res.status(201).send(req.body)
+    res.send("get /user")
 })
 
 module.exports = router
