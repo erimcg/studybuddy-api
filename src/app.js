@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors');
-//const userRouter = require('./routers/user')
+const userRouter = require('./routers/user')
 
 const app = express()
 
@@ -13,11 +13,11 @@ app.use(function (req, res, next) {
 
 app.use(express.json())
 
-app.get('/user', (req, res) => {
+app.get('', (req, res) => {
     res.send("hello")
 })
 
-//app.use(userRouter)
+app.use(userRouter)
 
 const port = process.env.PORT || 3000
 
