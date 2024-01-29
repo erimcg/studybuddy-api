@@ -13,7 +13,7 @@ app.use(function (req, res, next) {
 
 app.use(express.json())
 
-app.patch('/user', (req, res) => {
+app.get('/user', (req, res) => {
     res.send("hello")
 })
 
