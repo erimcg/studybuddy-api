@@ -12,15 +12,9 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json())
-
-app.get('/', (req, res) => {
-    res.send("hello")
-})
-
 app.use(userRouter)
 
 const port = process.env.PORT || 3000
-
 app.listen(port, () => {
     console.log('Server is up on port ' + port)
 })
