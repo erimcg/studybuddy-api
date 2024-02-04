@@ -9,7 +9,7 @@ const sendVerificationEmail = (toEmail, username, token) => {
         subject: 'Welcome to The Study Buddy!',
         imgURL: 'http://cdn.mcauto-images-production.sendgrid.net/f2199200cd991847/c15130ab-d4b6-4e11-8d2c-6d02b6f343ce/348x273.png',
         firstLine: `Thanks for signing up, ${username}!`,
-        secondLine: 'Please verify your email address to begin the chase.',
+        secondLine: 'Please verify your email address to begin studying with buddies.',
         thirdLine: 'Thank you!',
         buttonURL: `https://lively-glacier-0949d3f0f.4.azurestaticapps.net/verify.html?token=${token}`,
         buttonLabel: 'Verify Email Now'
