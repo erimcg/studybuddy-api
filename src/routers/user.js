@@ -1,6 +1,8 @@
 const express = require('express')
 const User = require('../models/user')
 const mongoose = require('mongoose')
+const auth = require('../middleware/auth')
+
 const { sendVerificationEmail } = require('../emails/account.js')
 
 const router = express.Router()
@@ -14,15 +16,27 @@ router.post('/user', async (req, res) => {
 
     try {
         await user.save()
-        sendVerificationEmail(user.email, user.username)
-        res.status(201).send(user)
-    } catch (error) {
+        const token = await user.generateAuthToken()
+
+        sendVerificationEmail(user.email, user.username, token)
+        res.status(201).send()
+    }
+    catch (error) {
+        console.log(error)
         res.status(400).send(error)
     }
 })
 
-router.get('/user/verification', async (req, res) => {
-    console.log("received request to verify email")
+router.get('/user/verification', auth, async (req, res) => {
+    const user = req.user
+    const token = req.token
+
+    console.log(user)
+    console.log(token)
+
+    user.emailVerified = true
+    user.save()
+    
     res.send()
 })
 

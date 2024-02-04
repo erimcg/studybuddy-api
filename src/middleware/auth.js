@@ -7,9 +7,11 @@ const auth = async (req, res, next) => {
         //console.log(token) 
         token = token.replace('Bearer ', '')
         const decoded = jwt.verify(token, process.env.JSON_WEB_TOKEN_SECRET)
-        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+        console.log(decoded)
+        const user = await User.findOne({ _id: decoded._id, 'tokens': token })
         
         if (!user) {
+            console.log('User not found in auth')
             throw new Error()
         }
         
