@@ -34,7 +34,7 @@ router.get('/user/verification', auth, async (req, res) => {
     console.log(user)
     console.log(token)
 
-    user.emailVerified = true
+    user.email_verified = true
     user.save()
     
     res.send()
