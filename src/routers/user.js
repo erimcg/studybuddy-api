@@ -22,6 +22,7 @@ router.post('/user', async (req, res) => {
 })
 
 router.get('/user/verification', async (req, res) => {
+    console.log("received request to verify email")
     res.send()
 })
 
