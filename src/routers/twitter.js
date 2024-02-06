@@ -19,10 +19,12 @@ router.post('/twitter/send-tweet', async (req, res) => {
         console.log("calling postTweet")
 
         if (postTweet(access_token, text)) {
+            console.log('sending response status 201')
             res.status(201).send()
             return
         }
     }
+    console.log('sending response status 400')
     res.status(400).send()
 })
 
