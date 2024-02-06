@@ -23,8 +23,14 @@ router.post('/twitter/send-tweet', async (req, res) => {
             res.status(201).send()
             return
         }
+        else {
+            console.log('sending response status 400')
+            res.status(400).send()
+            return
+        }
     }
-    console.log('sending response status 400')
+
+    console.log('sending response status 400*')
     res.status(400).send()
 })
 
