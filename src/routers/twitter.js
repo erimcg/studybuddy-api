@@ -11,7 +11,7 @@ router.post('/twitter/send-tweet', async (req, res) => {
     let text = req.body.text
     text ??= "Something strange happended. :)"
 
-    const access_token = getAccessToken(OAUTH2_CLIENT_ID, auth_code)
+    const access_token = await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
 
     if (access_token) {
         console.log('have access token')
@@ -27,6 +27,8 @@ router.post('/twitter/send-tweet', async (req, res) => {
 })
 
 async function postTweet(access_token, text) {
+
+    console.log('access_token:' + access_token)
 
     const url = `https://api.twitter.com/2/tweets`
 
