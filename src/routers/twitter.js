@@ -71,6 +71,8 @@ async function postTweet(access_token, text) {
 }
 
 async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
+    console.log("client id: " + OAUTH2_CLIENT_ID)
+    console.log("auth_code: " + auth_code)
 
     const details = {
         'grant_type': 'authorization_code',
