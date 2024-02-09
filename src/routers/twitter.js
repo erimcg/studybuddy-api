@@ -3,7 +3,6 @@ const auth = require('../middleware/auth')
 
 const router = express.Router()
 
-
 router.post('/twitter/send-tweet', async (req, res) => {
 
     const OAUTH2_CLIENT_ID = req.body.OAUTH2_CLIENT_ID
@@ -33,42 +32,6 @@ router.post('/twitter/send-tweet', async (req, res) => {
     console.log('sending response status 400*')
     res.status(400).send()
 })
-
-async function postTweet(access_token, text) {
-
-    console.log('access_token:' + access_token)
-
-    const url = `https://api.twitter.com/2/tweets`
-
-    const data = {
-        text
-    }
-
-    const options = {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${access_token}`,
-            "Content-Type": 'application/json'
-        },
-        body: JSON.stringify(data)
-    }
-
-    console.log("posting tweet")
-    let response = await fetch(url, options)
-
-    console.log("response from twitter")
-    const obj = await response.json()
-    console.log(obj)
-
-    if (response.status === 201) {
-        console.log("tweet successful")
-        return true
-    }
-    else {
-        console.log("error sending tweet")
-        return false
-    }
-}
 
 async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     console.log("client id: " + OAUTH2_CLIENT_ID)
@@ -105,16 +68,53 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     }
 
     let response = await fetch(url, options)
-    console.log(response.status)
+    console.log("fetch twitter auth token: " + response.status)
+    const obj = await response.json()
+    console.log(obj)
 
     if (response.status === 200) {
-        const obj = await response.json()
         return obj.access_token
     }
     else {
         return null
     }
 
+}
+
+async function postTweet(access_token, text) {
+
+    console.log('access_token:' + access_token)
+
+    const url = `https://api.twitter.com/2/tweets`
+
+    const data = {
+        text
+    }
+
+    const options = {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${access_token}`,
+            "Content-Type": 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    console.log("posting tweet")
+    let response = await fetch(url, options)
+
+    console.log("response from twitter")
+    const obj = await response.json()
+    console.log(obj)
+
+    if (response.status === 201) {
+        console.log("tweet successful")
+        return true
+    }
+    else {
+        console.log("error sending tweet")
+        return false
+    }
 }
 
 module.exports = router
