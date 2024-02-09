@@ -82,6 +82,8 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
         'code': auth_code
     }
 
+    console.log(details)
+
     let formBody = [];
     for (let property in details) {
         let encodedKey = encodeURIComponent(property);
