@@ -9,6 +9,7 @@ router.post('/twitter/send-tweet', async (req, res) => {
     const auth_code = req.body.auth_code
     let text = req.body.text
     text ??= "Something strange happended. :)"
+    console.log(req.body)
 
     const access_token = await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
 
