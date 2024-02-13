@@ -41,7 +41,7 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     const details = {
         'grant_type': 'authorization_code',
         'client_id': OAUTH2_CLIENT_ID,
-        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/main.html',
+        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/tweet.html',
         'code_verifier': 'challenge',
         'code': auth_code
     }
