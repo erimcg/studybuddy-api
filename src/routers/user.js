@@ -41,15 +41,19 @@ router.get('/user/verification', auth, async (req, res) => {
 
 router.post('/user/login', async (req, res) => {
     try {
+        console.log(req.body.email)
+        console.log(req.body.password)
+
         const user = await User.findByCredentials(req.body.email, req.body.password)
+        console.log(user)
 
-        if (user.emailVerified === false) {
+        if (user.email_verified === false) {
             res.status(401).send("Email has not been verified.")
-            return
         }
-
-        const token = await user.generateAuthToken()
-        res.status(200).send({ user, token })
+        else {
+            const token = await user.generateAuthToken()
+            res.status(200).send({ user, token })
+        }
     }
     catch (e) {
         console.log(e)
