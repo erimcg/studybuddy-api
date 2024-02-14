@@ -61,4 +61,20 @@ router.post('/user/login', async (req, res) => {
     }
 })
 
+router.patch('/user/logout', auth, async (req, res) => {
+    const user = req.user
+
+    try {
+        user.tokens = user.tokens.filter((token) => {
+            return token !== req.token
+        })
+        await user.save()
+
+        res.send()
+    }
+    catch (e) {
+        res.status(500).send()
+    }
+})
+
 module.exports = router
