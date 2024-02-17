@@ -31,7 +31,7 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
         }
     }
 
-    console.log('sending response status 400*')
+    console.log('cannot get access token from twitter')
     res.status(400).send()
 })
 
