@@ -3,13 +3,14 @@ const auth = require('../middleware/auth')
 
 const router = express.Router()
 
-router.post('/twitter/send-tweet', async (req, res) => {
+router.post('/twitter/send-tweet', auth, async (req, res) => {
+    const user = req.user
+    console.log(req.body)
 
     const OAUTH2_CLIENT_ID = req.body.OAUTH2_CLIENT_ID
     const auth_code = req.body.auth_code
     let text = req.body.text
     text ??= "Something strange happended. :)"
-    console.log(req.body)
 
     const access_token = await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
 
@@ -41,7 +42,7 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     const details = {
         'grant_type': 'authorization_code',
         'client_id': OAUTH2_CLIENT_ID,
-        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/tweet.html',
+        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/twitter-redirect.html',
         'code_verifier': 'challenge',
         'code': auth_code
     }
