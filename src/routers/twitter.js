@@ -12,23 +12,11 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
     const auth_code = req.body.auth_code
     let text = req.body.text
     text ??= "Something strange happended. :)"
+    
 
     const access_token = (twitter_authenticated) ?
         await getRefreshToken(OAUTH2_CLIENT_ID, user) :
         await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
-    
-    try {
-        console.log(access_token)
-        const refresh_token = Buffer.from(access_token, 'utf-8').toString();
-        console.log(refresh_token)
-        user.twitter_refresh_token = refresh_token
-        user.save()
-    }
-    catch (error) {
-        console.log('unable to save twitter access token')
-        res.status(400).send()
-        return
-    }
 
     if (access_token) {
         console.log('have access token')
@@ -93,6 +81,19 @@ async function getRefreshToken(OAUTH2_CLIENT_ID, user) {
     console.log(obj)
 
     if (response.status === 200) {
+        try {
+            console.log(obj.access_token)
+            console.log(obj.refresh_token)
+
+            user.twitter_refresh_token = obj.refresh_token
+            user.save()
+        }
+        catch (error) {
+            console.log('unable to save twitter access token')
+            res.status(400).send()
+            return
+        }
+        
         return obj.access_token
     }
     else {
@@ -136,11 +137,24 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     }
 
     let response = await fetch(url, options)
-    console.log("fetch twitter auth token: " + response.status)
+    console.log("fetch twitter access token: " + response.status)
     const obj = await response.json()
     console.log(obj)
 
     if (response.status === 200) {
+        try {
+            console.log(obj.access_token)
+            console.log(obj.refresh_token)
+
+            user.twitter_refresh_token = obj.refresh_token
+            user.save()
+        }
+        catch (error) {
+            console.log('unable to save twitter access token')
+            res.status(400).send()
+            return
+        }
+
         return obj.access_token
     }
     else {
