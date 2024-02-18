@@ -7,16 +7,14 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
     const user = req.user
     console.log(req.body)
 
-    const twitter_authenticated = req.body.twitter_authenticated
-    const OAUTH2_CLIENT_ID = req.body.OAUTH2_CLIENT_ID
     const auth_code = req.body.auth_code
     let text = req.body.text
     text ??= "Something strange happended. :)"
     
 
-    const access_token = (twitter_authenticated) ?
-        await getRefreshToken(OAUTH2_CLIENT_ID, user) :
-        await getAccessToken(OAUTH2_CLIENT_ID, auth_code, user)
+    const access_token = (user.twitter_refresh_token) ?
+        await getRefreshToken(user) :
+        await getAccessToken(auth_code, user)
 
     if (access_token) {
         console.log('have access token')
@@ -41,13 +39,13 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
 
 })
 
-async function getAccessToken(OAUTH2_CLIENT_ID, auth_code, user) {
-    console.log("client id: " + OAUTH2_CLIENT_ID)
+async function getAccessToken(auth_code, user) {
+    console.log("client id: " + process.env.TWITTER_CLIENT_ID)
     console.log("auth_code: " + auth_code)
 
     const details = {
         'grant_type': 'authorization_code',
-        'client_id': OAUTH2_CLIENT_ID,
+        'client_id': process.env.TWITTER_CLIENT_ID,
         'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/twitter-redirect.html',
         'code_verifier': 'challenge',
         'code': auth_code
@@ -101,15 +99,15 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code, user) {
 
 }
 
-async function getRefreshToken(OAUTH2_CLIENT_ID, user) {
+async function getRefreshToken(user) {
     const refresh_token = user.twitter_refresh_token
 
-    console.log("client id: " + OAUTH2_CLIENT_ID)
+    console.log("client id: " + process.env.TWITTER_CLIENT_ID)
     console.log("twitter refresh token: " + refresh_token)
 
     const details = {
         'grant_type': 'refresh_token',
-        'client_id': OAUTH2_CLIENT_ID,
+        'client_id': process.env.TWITTER_CLIENT_ID,
         'refresh_token': refresh_token
     }
 
