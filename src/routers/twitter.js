@@ -16,7 +16,7 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
 
     const access_token = (twitter_authenticated) ?
         await getRefreshToken(OAUTH2_CLIENT_ID, user) :
-        await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
+        await getAccessToken(OAUTH2_CLIENT_ID, auth_code, user)
 
     if (access_token) {
         console.log('have access token')
@@ -40,6 +40,66 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
     }
 
 })
+
+async function getAccessToken(OAUTH2_CLIENT_ID, auth_code, user) {
+    console.log("client id: " + OAUTH2_CLIENT_ID)
+    console.log("auth_code: " + auth_code)
+
+    const details = {
+        'grant_type': 'authorization_code',
+        'client_id': OAUTH2_CLIENT_ID,
+        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/twitter-redirect.html',
+        'code_verifier': 'challenge',
+        'code': auth_code
+    }
+
+    console.log(details)
+
+    let formBody = [];
+    for (let property in details) {
+        let encodedKey = encodeURIComponent(property);
+        let encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    console.log(formBody)
+
+    const url = `https://api.twitter.com/2/oauth2/token`
+
+    const options = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formBody
+    }
+
+    let response = await fetch(url, options)
+    console.log("fetch twitter access token: " + response.status)
+    const obj = await response.json()
+    console.log(obj)
+
+    if (response.status === 200) {
+        try {
+            console.log(obj.access_token)
+            console.log(obj.refresh_token)
+
+            user.twitter_refresh_token = obj.refresh_token
+            user.save()
+        }
+        catch (error) {
+            console.log('unable to save twitter refresh token')
+            return null
+        }
+
+        return obj.access_token
+    }
+    else {
+        return null
+    }
+
+}
 
 async function getRefreshToken(OAUTH2_CLIENT_ID, user) {
     const refresh_token = user.twitter_refresh_token
@@ -90,69 +150,7 @@ async function getRefreshToken(OAUTH2_CLIENT_ID, user) {
         }
         catch (error) {
             console.log('unable to save twitter access token')
-            res.status(400).send()
-            return
-        }
-        
-        return obj.access_token
-    }
-    else {
-        return null
-    }
-
-}
-
-async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
-    console.log("client id: " + OAUTH2_CLIENT_ID)
-    console.log("auth_code: " + auth_code)
-
-    const details = {
-        'grant_type': 'authorization_code',
-        'client_id': OAUTH2_CLIENT_ID,
-        'redirect_uri': 'https://n0code.net/work/teaching/courses/csci430/studybuddy/twitter-redirect.html',
-        'code_verifier': 'challenge',
-        'code': auth_code
-    }
-
-    console.log(details)
-
-    let formBody = [];
-    for (let property in details) {
-        let encodedKey = encodeURIComponent(property);
-        let encodedValue = encodeURIComponent(details[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
-    }
-    formBody = formBody.join("&");
-
-    console.log(formBody)
-
-    const url = `https://api.twitter.com/2/oauth2/token`
-
-    const options = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: formBody
-    }
-
-    let response = await fetch(url, options)
-    console.log("fetch twitter access token: " + response.status)
-    const obj = await response.json()
-    console.log(obj)
-
-    if (response.status === 200) {
-        try {
-            console.log(obj.access_token)
-            console.log(obj.refresh_token)
-
-            user.twitter_refresh_token = obj.refresh_token
-            user.save()
-        }
-        catch (error) {
-            console.log('unable to save twitter access token')
-            res.status(400).send()
-            return
+            return null
         }
 
         return obj.access_token
@@ -160,7 +158,6 @@ async function getAccessToken(OAUTH2_CLIENT_ID, auth_code) {
     else {
         return null
     }
-
 }
 
 async function postTweet(access_token, text) {
