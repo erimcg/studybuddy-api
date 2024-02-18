@@ -18,7 +18,10 @@ router.post('/twitter/send-tweet', auth, async (req, res) => {
         await getAccessToken(OAUTH2_CLIENT_ID, auth_code)
     
     try {
-        user.twitter_refresh_token = access_token
+        console.log(access_token)
+        const refresh_token = Buffer.from(access_token, 'utf-8').toString();
+        console.log(refresh_token)
+        user.twitter_refresh_token = refresh_token
         user.save()
     }
     catch (error) {
