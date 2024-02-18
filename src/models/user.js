@@ -16,7 +16,8 @@ const userSchema = new Schema({
     school: { type: String, required: true },
     email_verified: { type: Boolean, default: false },
     majors: [String], tokens: [String],
-    profile_pic: Buffer
+    profile_pic: Buffer,
+    twitter_refresh_token: String
 })
 
 userSchema.pre('save', async function (next) {
