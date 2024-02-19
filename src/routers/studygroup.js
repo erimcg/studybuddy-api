@@ -11,12 +11,10 @@ router.post('/studygroup', auth, async (req, res) => {
 
     const user = req.user
 
-    req.body.owner = req.user._id
-
     try {
         const group = new StudyGroup({
             ...req.body,
-            host: user._id
+            owner: user._id
         })
 
         await group.save()
@@ -26,7 +24,6 @@ router.post('/studygroup', auth, async (req, res) => {
         console.log(error)
         res.status(400).send()
     }
-
 })
 
 module.exports = router

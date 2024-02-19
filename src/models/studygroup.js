@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
-const validator = require("validator");
-
+const validator = require('validator')
 const DAYSOFWEEK = require('./daysofweek')
 
 const Schema = mongoose.Schema
+
 const studyGroupSchema = new Schema({
     name: { type: String, required: true, trim: true },
     owner: { type: Schema.Types.ObjectId, ref: 'User', required: true },
@@ -11,19 +11,17 @@ const studyGroupSchema = new Schema({
     max_participants: { type: Number, required: true },
     start_date: {
         type: Date,
-        required: true,
         validate(value) {
             if (!validator.isISO8601(value.toJSON())) {
-                throw new Error("Start date is invalid.");
+                throw new Error('Start date is invalid')
             }
         }
     },
     end_date: {
         type: Date,
-        required: true,
         validate(value) {
             if (!validator.isISO8601(value.toJSON())) {
-                throw new Error("Start date is invalid.");
+                throw new Error('Start date is invalid')
             }
         }
     },
@@ -32,19 +30,23 @@ const studyGroupSchema = new Schema({
         time: {
             type: String,
             validate(value) {
-                if (!validator.isTime(value)) { throw new Error('Time is invalid.') }
+                if (!validator.isTime(value)) {
+                    throw new Error('Time is invalid')
+                }
             },
             required: true
         },
-        location: { type: String, required: true }
+        location: { type: String, required: true}
     }],
     description: String,
     school: String,
     course_number: String,
-    participants: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }]
+    participants: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User'
+        }
+    ]
 })
 
 studyGroupSchema.methods.toJSON = function () {
@@ -52,9 +54,8 @@ studyGroupSchema.methods.toJSON = function () {
     const groupObject = group.toObject()
 
     delete groupObject.__v
-
     return groupObject
 }
 
-const StudyGroup = mongoose.model('Group', studyGroupSchema);
+const StudyGroup = mongoose.model('StudyGroup', studyGroupSchema)
 module.exports = StudyGroup

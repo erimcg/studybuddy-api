@@ -1,12 +1,11 @@
-
 DAYSOFWEEK = [
-    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday'
+    'Saturday',
+    'Sunday'
 ]
 
 module.exports = DAYSOFWEEK
